@@ -2,16 +2,87 @@ package enigmamachine_test
 
 import "testing"
 
+type testCase struct {
+	reflector     Reflector
+	rotors        []Rotor
+	ringPositions []int
+	plugboard     []string
+	positions     []rune
+	input         string
+	expected      string
+}
+
+func testExamples(examples []testCase, t *testing.T) {
+	for i, ex := range examples {
+		machine := New(MachineSetup{
+			Reflector:    ex.reflector,
+			Rotors:       ex.rotors,
+			RingPosition: ex.ringPositions,
+			Plugboard:    ex.plugboard,
+		})
+		machine.SetPositions(ex.positions)
+		actual := machine.Translate(ex.input)
+		if actual != ex.expected {
+			t.Errorf("[%d] want: %s, got: %s for input %s", i, ex.expected, actual, ex.input)
+		}
+	}
+}
+
+func TestBasicSamples(t *testing.T) {
+	examples := []testCase{
+		// Examples from http://wiki.franklinheath.co.uk/index.php/Enigma/Paper_Enigma
+		{
+			// message that only needs the right rotor to advance
+			reflector:     ReflectorB,
+			rotors:        []Rotor{RotorI, RotorII, RotorIII},
+			ringPositions: []int{1, 1, 1},
+			positions:     []rune{'A', 'B', 'C'},
+			input:         "AEFAE JXXBN XYJTY",
+			expected:      "CONGR ATULA TIONS",
+		},
+		{
+			// message with rotor turnover
+			reflector:     ReflectorB,
+			rotors:        []Rotor{RotorI, RotorII, RotorIII},
+			ringPositions: []int{1, 1, 1},
+			positions:     []rune{'A', 'B', 'R'},
+			input:         "MABEK GZXSG",
+			expected:      "TURNM IDDLE",
+		},
+		{
+			// message with double stepping
+			reflector:     ReflectorB,
+			rotors:        []Rotor{RotorI, RotorII, RotorIII},
+			ringPositions: []int{1, 1, 1},
+			positions:     []rune{'A', 'D', 'S'},
+			input:         "RZFOG FYHPL",
+			expected:      "TURNS THREE",
+		},
+		{
+			// message with ring settings
+			reflector:     ReflectorB,
+			rotors:        []Rotor{RotorI, RotorII, RotorIII},
+			ringPositions: []int{10, 14, 21},
+			positions:     []rune{'X', 'Y', 'Z'},
+			input:         "QKTPE BZIUK",
+			expected:      "GOODR ESULT",
+		},
+		{
+			// message with a plugboard as well
+			reflector:     ReflectorB,
+			rotors:        []Rotor{RotorI, RotorII, RotorIII},
+			ringPositions: []int{10, 14, 21},
+			plugboard:     []string{"AP", "BR", "CM", "FZ", "GJ", "IL", "NT", "OV", "QS", "WX"},
+			positions:     []rune{'V', 'Q', 'Q'},
+			input:         "HABHV HLYDF NADZY",
+			expected:      "THATS ITWEL LDONE",
+		},
+	}
+	testExamples(examples, t)
+}
+
 func TestRealExamples(t *testing.T) {
-	realExamples := []struct {
-		reflector     Reflector
-		rotors        []Rotor
-		ringPositions []int
-		plugboard     []string
-		positions     []rune
-		input         string
-		expected      string
-	}{
+	examples := []testCase{
 		// Examples taken from http://wiki.franklinheath.co.uk/index.php/Enigma/Sample_Messages
 		{
 			// Enigma Instruction Manual 1930
@@ -62,17 +133,5 @@ func TestRealExamples(t *testing.T) {
 			// English: From Looks, radio-telegram 1132/19 contents: Forced to submerge under attack, depth charges. Last enemy location 08:30 hours, sea square AJ9863, following 220 degrees, 8 knots. [Pressure] 14 millibars falling, [wind] north-north-east 4, visibility 10.
 		},
 	}
-	for i, ex := range realExamples {
-		machine := New(MachineSetup{
-			Reflector:    ex.reflector,
-			Rotors:       ex.rotors,
-			RingPosition: ex.ringPositions,
-			Plugboard:    ex.plugboard,
-		})
-		machine.SetPositions(ex.positions)
-		actual := machine.Translate(ex.input)
-		if actual != ex.expected {
-			t.Errorf("[%d] want: %s, got: %s for input %s", i, ex.expected, actual, ex.input)
-		}
-	}
+	testExamples(examples, t)
 }

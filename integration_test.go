@@ -1,10 +1,16 @@
 package enigmamachine_test
 
-import "testing"
+import (
+	"testing"
+
+	em "github.com/alext/enigmamachine"
+	"github.com/alext/enigmamachine/reflectors"
+	"github.com/alext/enigmamachine/rotors"
+)
 
 type testCase struct {
-	reflector     Reflector
-	rotors        []Rotor
+	reflector     em.Reflector
+	rotors        []em.Rotor
 	ringPositions []int
 	plugboard     []string
 	positions     []rune
@@ -14,7 +20,7 @@ type testCase struct {
 
 func testExamples(examples []testCase, t *testing.T) {
 	for i, ex := range examples {
-		machine := New(MachineSetup{
+		machine := em.New(em.MachineSetup{
 			Reflector:    ex.reflector,
 			Rotors:       ex.rotors,
 			RingPosition: ex.ringPositions,
@@ -33,8 +39,8 @@ func TestBasicSamples(t *testing.T) {
 		// Examples from http://wiki.franklinheath.co.uk/index.php/Enigma/Paper_Enigma
 		{
 			// message that only needs the right rotor to advance
-			reflector:     ReflectorB,
-			rotors:        []Rotor{RotorI, RotorII, RotorIII},
+			reflector:     reflectors.B,
+			rotors:        []em.Rotor{rotors.I, rotors.II, rotors.III},
 			ringPositions: []int{1, 1, 1},
 			positions:     []rune{'A', 'B', 'C'},
 			input:         "AEFAE JXXBN XYJTY",
@@ -42,8 +48,8 @@ func TestBasicSamples(t *testing.T) {
 		},
 		{
 			// message with rotor turnover
-			reflector:     ReflectorB,
-			rotors:        []Rotor{RotorI, RotorII, RotorIII},
+			reflector:     reflectors.B,
+			rotors:        []em.Rotor{rotors.I, rotors.II, rotors.III},
 			ringPositions: []int{1, 1, 1},
 			positions:     []rune{'A', 'B', 'R'},
 			input:         "MABEK GZXSG",
@@ -51,8 +57,8 @@ func TestBasicSamples(t *testing.T) {
 		},
 		{
 			// message with double stepping
-			reflector:     ReflectorB,
-			rotors:        []Rotor{RotorI, RotorII, RotorIII},
+			reflector:     reflectors.B,
+			rotors:        []em.Rotor{rotors.I, rotors.II, rotors.III},
 			ringPositions: []int{1, 1, 1},
 			positions:     []rune{'A', 'D', 'S'},
 			input:         "RZFOG FYHPL",
@@ -60,8 +66,8 @@ func TestBasicSamples(t *testing.T) {
 		},
 		{
 			// message with ring settings
-			reflector:     ReflectorB,
-			rotors:        []Rotor{RotorI, RotorII, RotorIII},
+			reflector:     reflectors.B,
+			rotors:        []em.Rotor{rotors.I, rotors.II, rotors.III},
 			ringPositions: []int{10, 14, 21},
 			positions:     []rune{'X', 'Y', 'Z'},
 			input:         "QKTPE BZIUK",
@@ -69,8 +75,8 @@ func TestBasicSamples(t *testing.T) {
 		},
 		{
 			// message with a plugboard as well
-			reflector:     ReflectorB,
-			rotors:        []Rotor{RotorI, RotorII, RotorIII},
+			reflector:     reflectors.B,
+			rotors:        []em.Rotor{rotors.I, rotors.II, rotors.III},
 			ringPositions: []int{10, 14, 21},
 			plugboard:     []string{"AP", "BR", "CM", "FZ", "GJ", "IL", "NT", "OV", "QS", "WX"},
 			positions:     []rune{'V', 'Q', 'Q'},
@@ -86,8 +92,8 @@ func TestRealExamples(t *testing.T) {
 		// Examples taken from http://wiki.franklinheath.co.uk/index.php/Enigma/Sample_Messages
 		{
 			// Enigma Instruction Manual 1930
-			reflector:     ReflectorA,
-			rotors:        []Rotor{RotorII, RotorI, RotorIII},
+			reflector:     reflectors.A,
+			rotors:        []em.Rotor{rotors.II, rotors.I, rotors.III},
 			ringPositions: []int{24, 13, 22},
 			plugboard:     []string{"AM", "FI", "NV", "PS", "TU", "WZ"},
 			positions:     []rune{'A', 'B', 'L'},
@@ -98,8 +104,8 @@ func TestRealExamples(t *testing.T) {
 		},
 		{
 			// Operation Barbarossa, 1941
-			reflector:     ReflectorB,
-			rotors:        []Rotor{RotorII, RotorIV, RotorV},
+			reflector:     reflectors.B,
+			rotors:        []em.Rotor{rotors.II, rotors.IV, rotors.V},
 			ringPositions: []int{2, 21, 12},
 			plugboard:     []string{"AV", "BS", "CG", "DL", "FU", "HZ", "IN", "KM", "OW", "RX"},
 			positions:     []rune{'B', 'S', 'A'},
@@ -110,8 +116,8 @@ func TestRealExamples(t *testing.T) {
 		},
 		{
 			// Scharnhorst (Konteradmiral Erich Bey), 1943
-			reflector:     ReflectorB,
-			rotors:        []Rotor{RotorIII, RotorVI, RotorVIII},
+			reflector:     reflectors.B,
+			rotors:        []em.Rotor{rotors.III, rotors.VI, rotors.VIII},
 			ringPositions: []int{1, 8, 13},
 			plugboard:     []string{"AN", "EZ", "HK", "IJ", "LR", "MQ", "OT", "PV", "SW", "UX"},
 			positions:     []rune{'U', 'Z', 'V'},
@@ -122,8 +128,8 @@ func TestRealExamples(t *testing.T) {
 		},
 		{
 			// Enigma M4: U-264 (Kapitänleutnant Hartwig Looks), 1942
-			reflector:     ReflectorBthin,
-			rotors:        []Rotor{RotorBeta, RotorII, RotorIV, RotorI},
+			reflector:     reflectors.Bthin,
+			rotors:        []em.Rotor{rotors.Beta, rotors.II, rotors.IV, rotors.I},
 			ringPositions: []int{1, 1, 1, 22},
 			plugboard:     []string{"AT", "BL", "DF", "GJ", "HM", "NW", "OP", "QY", "RZ", "VX"},
 			positions:     []rune{'V', 'J', 'N', 'A'},

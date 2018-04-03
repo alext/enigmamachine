@@ -139,7 +139,7 @@ func TestRotorSetup(t *testing.T) {
 		"eKMFLGDQVZNTOWYHXUSPAIBRCJ",   // invalid char
 		"EKMFLGDQVZNTOWYHXUSPAIBRC",    // incomplete
 		"EKMFLGDQVZNTOWYHXUSPAIBRCJ_z", // invalid notch
-		"EKEFLGDQVZNTOWYHXUSPAIBRCJ",   // Duplicate entry
+		"EKEFLGDQVZNTOWYHXUSPAIBRCJ_N", // Duplicate entry
 	}
 	for i, spec := range errorExamples {
 		_, err := em.NewRotor(spec, 1, nil)
@@ -149,8 +149,15 @@ func TestRotorSetup(t *testing.T) {
 		}
 	}
 
-	_, err := em.NewRotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ_N", 1, nil)
-	if err != nil {
-		t.Errorf("good config, expected no error, got: '%s'", err.Error())
+	validExamples := []em.RotorSpec{
+		"EKMFLGDQVZNTOWYHXUSPAIBRCJ_N",
+		"EKMFLGDQVZNTOWYHXUSPAIBRCJ_",
+		"EKMFLGDQVZNTOWYHXUSPAIBRCJ",
+	}
+	for i, spec := range validExamples {
+		_, err := em.NewRotor(spec, 1, nil)
+		if err != nil {
+			t.Errorf("[%d] spec: %s, expected no error, got: '%s'", i, spec, err.Error())
+		}
 	}
 }

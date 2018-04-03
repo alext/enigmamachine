@@ -10,7 +10,7 @@ import (
 
 type testCase struct {
 	reflector     em.Reflector
-	rotors        []em.Rotor
+	rotors        []em.RotorSpec
 	ringPositions []int
 	plugboard     []string
 	positions     []rune
@@ -40,7 +40,7 @@ func TestBasicSamples(t *testing.T) {
 		{
 			// message that only needs the right rotor to advance
 			reflector:     reflectors.B,
-			rotors:        []em.Rotor{rotors.I, rotors.II, rotors.III},
+			rotors:        []em.RotorSpec{rotors.I, rotors.II, rotors.III},
 			ringPositions: []int{1, 1, 1},
 			positions:     []rune{'A', 'B', 'C'},
 			input:         "AEFAE JXXBN XYJTY",
@@ -49,7 +49,7 @@ func TestBasicSamples(t *testing.T) {
 		{
 			// message with rotor turnover
 			reflector:     reflectors.B,
-			rotors:        []em.Rotor{rotors.I, rotors.II, rotors.III},
+			rotors:        []em.RotorSpec{rotors.I, rotors.II, rotors.III},
 			ringPositions: []int{1, 1, 1},
 			positions:     []rune{'A', 'B', 'R'},
 			input:         "MABEK GZXSG",
@@ -58,7 +58,7 @@ func TestBasicSamples(t *testing.T) {
 		{
 			// message with double stepping
 			reflector:     reflectors.B,
-			rotors:        []em.Rotor{rotors.I, rotors.II, rotors.III},
+			rotors:        []em.RotorSpec{rotors.I, rotors.II, rotors.III},
 			ringPositions: []int{1, 1, 1},
 			positions:     []rune{'A', 'D', 'S'},
 			input:         "RZFOG FYHPL",
@@ -67,7 +67,7 @@ func TestBasicSamples(t *testing.T) {
 		{
 			// message with ring settings
 			reflector:     reflectors.B,
-			rotors:        []em.Rotor{rotors.I, rotors.II, rotors.III},
+			rotors:        []em.RotorSpec{rotors.I, rotors.II, rotors.III},
 			ringPositions: []int{10, 14, 21},
 			positions:     []rune{'X', 'Y', 'Z'},
 			input:         "QKTPE BZIUK",
@@ -76,7 +76,7 @@ func TestBasicSamples(t *testing.T) {
 		{
 			// message with a plugboard as well
 			reflector:     reflectors.B,
-			rotors:        []em.Rotor{rotors.I, rotors.II, rotors.III},
+			rotors:        []em.RotorSpec{rotors.I, rotors.II, rotors.III},
 			ringPositions: []int{10, 14, 21},
 			plugboard:     []string{"AP", "BR", "CM", "FZ", "GJ", "IL", "NT", "OV", "QS", "WX"},
 			positions:     []rune{'V', 'Q', 'Q'},
@@ -93,7 +93,7 @@ func TestRealExamples(t *testing.T) {
 		{
 			// Enigma Instruction Manual 1930
 			reflector:     reflectors.A,
-			rotors:        []em.Rotor{rotors.II, rotors.I, rotors.III},
+			rotors:        []em.RotorSpec{rotors.II, rotors.I, rotors.III},
 			ringPositions: []int{24, 13, 22},
 			plugboard:     []string{"AM", "FI", "NV", "PS", "TU", "WZ"},
 			positions:     []rune{'A', 'B', 'L'},
@@ -105,7 +105,7 @@ func TestRealExamples(t *testing.T) {
 		{
 			// Operation Barbarossa, 1941
 			reflector:     reflectors.B,
-			rotors:        []em.Rotor{rotors.II, rotors.IV, rotors.V},
+			rotors:        []em.RotorSpec{rotors.II, rotors.IV, rotors.V},
 			ringPositions: []int{2, 21, 12},
 			plugboard:     []string{"AV", "BS", "CG", "DL", "FU", "HZ", "IN", "KM", "OW", "RX"},
 			positions:     []rune{'B', 'S', 'A'},
@@ -117,7 +117,7 @@ func TestRealExamples(t *testing.T) {
 		{
 			// Scharnhorst (Konteradmiral Erich Bey), 1943
 			reflector:     reflectors.B,
-			rotors:        []em.Rotor{rotors.III, rotors.VI, rotors.VIII},
+			rotors:        []em.RotorSpec{rotors.III, rotors.VI, rotors.VIII},
 			ringPositions: []int{1, 8, 13},
 			plugboard:     []string{"AN", "EZ", "HK", "IJ", "LR", "MQ", "OT", "PV", "SW", "UX"},
 			positions:     []rune{'U', 'Z', 'V'},
@@ -129,7 +129,7 @@ func TestRealExamples(t *testing.T) {
 		{
 			// Enigma M4: U-264 (Kapitänleutnant Hartwig Looks), 1942
 			reflector:     reflectors.Bthin,
-			rotors:        []em.Rotor{rotors.Beta, rotors.II, rotors.IV, rotors.I},
+			rotors:        []em.RotorSpec{rotors.Beta, rotors.II, rotors.IV, rotors.I},
 			ringPositions: []int{1, 1, 1, 22},
 			plugboard:     []string{"AT", "BL", "DF", "GJ", "HM", "NW", "OP", "QY", "RZ", "VX"},
 			positions:     []rune{'V', 'J', 'N', 'A'},

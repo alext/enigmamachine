@@ -3,7 +3,7 @@ package rotors
 import "github.com/alext/enigmamachine"
 
 const (
-	I enigmamachine.Rotor = ""
+	I enigmamachine.RotorSpec = ""
 	II
 	III
 	IV

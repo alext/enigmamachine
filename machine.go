@@ -4,7 +4,7 @@ type Machine struct{}
 
 type MachineSetup struct {
 	Reflector     Reflector
-	Rotors        []Rotor
+	Rotors        []RotorSpec
 	RingPositions []int
 	Plugboard     []string
 }

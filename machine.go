@@ -6,7 +6,7 @@ type MachineSetup struct {
 	Reflector     ReflectorSpec
 	Rotors        []RotorSpec
 	RingPositions []int
-	Plugboard     []string
+	Plugboard     PlugboardSpec
 }
 
 func New(s MachineSetup) *Machine {

@@ -12,7 +12,7 @@ type testCase struct {
 	reflector     em.ReflectorSpec
 	rotors        []em.RotorSpec
 	ringPositions []int
-	plugboard     []string
+	plugboard     em.PlugboardSpec
 	positions     []rune
 	input         string
 	expected      string
@@ -78,7 +78,7 @@ func TestBasicSamples(t *testing.T) {
 			reflector:     reflectors.B,
 			rotors:        []em.RotorSpec{rotors.I, rotors.II, rotors.III},
 			ringPositions: []int{10, 14, 21},
-			plugboard:     []string{"AP", "BR", "CM", "FZ", "GJ", "IL", "NT", "OV", "QS", "WX"},
+			plugboard:     "AP BR CM FZ GJ IL NT OV QS WX",
 			positions:     []rune{'V', 'Q', 'Q'},
 			input:         "HABHV HLYDF NADZY",
 			expected:      "THATS ITWEL LDONE",
@@ -95,7 +95,7 @@ func TestRealExamples(t *testing.T) {
 			reflector:     reflectors.A,
 			rotors:        []em.RotorSpec{rotors.II, rotors.I, rotors.III},
 			ringPositions: []int{24, 13, 22},
-			plugboard:     []string{"AM", "FI", "NV", "PS", "TU", "WZ"},
+			plugboard:     "AM FI NV PS TU WZ",
 			positions:     []rune{'A', 'B', 'L'},
 			input:         "GCDSE AHUGW TQGRK VLFGX UCALX VYMIG MMNMF DXTGN VHVRM MEVOU YFZSL RHDRR XFJWC FHUHM UNZEF RDISI KBGPM YVXUZ",
 			expected:      "FEIND LIQEI NFANT ERIEK OLONN EBEOB AQTET XANFA NGSUE DAUSG ANGBA ERWAL DEXEN DEDRE IKMOS TWAER TSNEU STADT",
@@ -107,7 +107,7 @@ func TestRealExamples(t *testing.T) {
 			reflector:     reflectors.B,
 			rotors:        []em.RotorSpec{rotors.II, rotors.IV, rotors.V},
 			ringPositions: []int{2, 21, 12},
-			plugboard:     []string{"AV", "BS", "CG", "DL", "FU", "HZ", "IN", "KM", "OW", "RX"},
+			plugboard:     "AV BS CG DL FU HZ IN KM OW RX",
 			positions:     []rune{'B', 'S', 'A'},
 			input:         "EDPUD NRGYS ZRCXN UYTPO MRMBO FKTBZ REZKM LXLVE FGUEY SIOZV EQMIK UBPMM YLKLT TDEIS MDICA GYKUA CTCDO MOHWX MUUIA UBSTS LRNBZ SZWNR FXWFY SSXJZ VIJHI DISHP RKLKA YUPAD TXQSP INQMA TLPIF SVKDA SCTAC DPBOP VHJK-",
 			expected:      "AUFKL XABTE ILUNG XVONX KURTI NOWAX KURTI NOWAX NORDW ESTLX SEBEZ XSEBE ZXUAF FLIEG ERSTR ASZER IQTUN GXDUB ROWKI XDUBR OWKIX OPOTS CHKAX OPOTS CHKAX UMXEI NSAQT DREIN ULLXU HRANG ETRET ENXAN GRIFF XINFX RGTX-",
@@ -119,7 +119,7 @@ func TestRealExamples(t *testing.T) {
 			reflector:     reflectors.B,
 			rotors:        []em.RotorSpec{rotors.III, rotors.VI, rotors.VIII},
 			ringPositions: []int{1, 8, 13},
-			plugboard:     []string{"AN", "EZ", "HK", "IJ", "LR", "MQ", "OT", "PV", "SW", "UX"},
+			plugboard:     "AN EZ HK IJ LR MQ OT PV SW UX",
 			positions:     []rune{'U', 'Z', 'V'},
 			input:         "YKAE NZAP MSCH ZBFO CUVM RMDP YCOF HADZ IZME FXTH FLOL PZLF GGBO TGOX GRET DWTJ IQHL MXVJ WKZU ASTR",
 			expected:      "STEU EREJ TANA FJOR DJAN STAN DORT QUAA ACCC VIER NEUN NEUN ZWOF AHRT ZWON ULSM XXSC HARN HORS THCO",
@@ -131,7 +131,7 @@ func TestRealExamples(t *testing.T) {
 			reflector:     reflectors.Bthin,
 			rotors:        []em.RotorSpec{rotors.Beta, rotors.II, rotors.IV, rotors.I},
 			ringPositions: []int{1, 1, 1, 22},
-			plugboard:     []string{"AT", "BL", "DF", "GJ", "HM", "NW", "OP", "QY", "RZ", "VX"},
+			plugboard:     "AT BL DF GJ HM NW OP QY RZ VX",
 			positions:     []rune{'V', 'J', 'N', 'A'},
 			input:         "NCZW VUSX PNYM INHZ XMQX SFWX WLKJ AHSH NMCO CCAK UQPM KCSM HKSE INJU SBLK IOSX CKUB HMLL XCSJ USRR DVKO HULX WCCB GVLI YXEO AHXR HKKF VDRE WEZL XOBA FGYU JQUK GRTV UKAM EURB VEKS UHHV OYHA BCJW MAKL FKLM YFVN RIZR VVRT KOFD ANJM OLBG FFLE OPRG TFLV RHOW OPBE KVWM UQFM PWPA RMFH AGKX IIBG",
 			expected:      "VONV ONJL OOKS JHFF TTTE INSE INSD REIZ WOYY QNNS NEUN INHA LTXX BEIA NGRI FFUN TERW ASSE RGED RUEC KTYW ABOS XLET ZTER GEGN ERST ANDN ULAC HTDR EINU LUHR MARQ UANT ONJO TANE UNAC HTSE YHSD REIY ZWOZ WONU LGRA DYAC HTSM YSTO SSEN ACHX EKNS VIER MBFA ELLT YNNN NNNO OOVI ERYS ICHT EINS NULL",

@@ -1,13 +1,15 @@
 package enigmamachine
 
+type PlugboardSpec string
+
 type Plugboard struct {
 	substitutor
 	next Translator
 }
 
-func NewPlugboard(config string, next Translator) (p Plugboard, err error) {
+func NewPlugboard(config PlugboardSpec, next Translator) (p Plugboard, err error) {
 	p = Plugboard{next: next}
-	p.substitutor, err = newSwappingSubstitutor(config)
+	p.substitutor, err = newSwappingSubstitutor(string(config))
 	return p, err
 }
 

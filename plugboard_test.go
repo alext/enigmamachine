@@ -66,7 +66,7 @@ func TestPlugboardTranslate(t *testing.T) {
 
 func TestPlugboardSetup(t *testing.T) {
 	errorExamples := []struct {
-		config         string
+		config         em.PlugboardSpec
 		errorSubstring string
 	}{
 		{

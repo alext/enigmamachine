@@ -31,6 +31,19 @@ func newSubstitutor(mapping string) (substitutor, error) {
 	return s, nil
 }
 
+func newBidirectionalSubstitutors(mapping string) (forward, reverse substitutor, err error) {
+	forward, reverse = make(substitutor), make(substitutor)
+	for i, r := range mapping {
+		if _, found := reverse[r]; found {
+			return nil, nil, fmt.Errorf("Duplicate entry '%c' in mapping", r)
+		}
+		c := rune('A' + i)
+		forward[c] = r
+		reverse[r] = c
+	}
+	return forward, reverse, nil
+}
+
 func (s substitutor) substitute(input rune) rune {
 	r, ok := s[input]
 	if ok {

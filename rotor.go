@@ -31,16 +31,8 @@ func (rs RotorSpec) parse() (forward, reverse substitutor, notches string, err e
 		return nil, nil, "", err
 	}
 	mapping, notches := rs.split()
-	forward, reverse = make(substitutor), make(substitutor)
-	for i, r := range mapping {
-		if _, found := reverse[r]; found {
-			return nil, nil, "", fmt.Errorf("Duplicate entry '%c' in mapping", r)
-		}
-		c := rune('A' + i)
-		forward[c] = r
-		reverse[r] = c
-	}
-	return forward, reverse, notches, nil
+	forward, reverse, err = newBidirectionalSubstitutors(mapping)
+	return forward, reverse, notches, err
 }
 
 type Rotor struct {

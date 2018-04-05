@@ -44,11 +44,11 @@ func (rs RotorSpec) parse() (forward, reverse substitutor, notches string, err e
 }
 
 type Rotor struct {
-	next     Translator
-	forward  substitutor
-	reverse  substitutor
-	notches  string
-	position rune
+	next           Translator
+	forward        substitutor
+	reverse        substitutor
+	notches        string
+	positionOffset int
 }
 
 func NewRotor(spec RotorSpec, ringSetting int, next Translator) (*Rotor, error) {
@@ -57,32 +57,29 @@ func NewRotor(spec RotorSpec, ringSetting int, next Translator) (*Rotor, error) 
 		return nil, err
 	}
 	r := &Rotor{
-		next:     next,
-		forward:  forward,
-		reverse:  reverse,
-		notches:  notches,
-		position: 'A',
+		next:           next,
+		forward:        forward,
+		reverse:        reverse,
+		notches:        notches,
+		positionOffset: 0,
 	}
 	return r, nil
 }
 
 func (r *Rotor) Position() rune {
-	return r.position
+	return rune('A' + r.positionOffset)
 }
 
 func (r *Rotor) SetPosition(pos rune) {
-	r.position = pos
+	r.positionOffset = int(pos - 'A')
 }
 
 func (r *Rotor) AdvancePosition() {
-	r.position += 1
-	if r.position > 'Z' {
-		r.position = 'A'
-	}
+	r.positionOffset = (r.positionOffset + 1) % 26
 }
 
 func (r *Rotor) AtNotch() bool {
-	return strings.ContainsRune(r.notches, r.position)
+	return strings.ContainsRune(r.notches, r.Position())
 }
 
 func (r *Rotor) Translate(input rune) rune {

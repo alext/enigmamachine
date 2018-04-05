@@ -4,7 +4,7 @@ import "fmt"
 
 type substitutor map[rune]rune
 
-func newSubstitutor(mapping string) (substitutor, error) {
+func newSwappingSubstitutor(mapping string) (substitutor, error) {
 	s := make(substitutor)
 	var first rune
 	for _, r := range mapping {
@@ -27,6 +27,9 @@ func newSubstitutor(mapping string) (substitutor, error) {
 		}
 		s[r] = first
 		first = 0
+	}
+	if first != 0 {
+		return nil, fmt.Errorf("unpaired character %c in mapping", first)
 	}
 	return s, nil
 }

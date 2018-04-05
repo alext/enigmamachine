@@ -77,6 +77,10 @@ func TestPlugboardSetup(t *testing.T) {
 			config:         "AB CD GC",
 			errorSubstring: "duplicate character",
 		},
+		{
+			config:         "AB CD EF G",
+			errorSubstring: "unpaired character",
+		},
 	}
 	for i, ex := range errorExamples {
 		_, err := em.NewPlugboard(ex.config, nil)

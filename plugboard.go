@@ -7,7 +7,7 @@ type Plugboard struct {
 
 func NewPlugboard(config string, next Translator) (p Plugboard, err error) {
 	p = Plugboard{next: next}
-	p.substitutor, err = newSubstitutor(config)
+	p.substitutor, err = newSwappingSubstitutor(config)
 	return p, err
 }
 

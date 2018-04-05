@@ -20,12 +20,16 @@ type testCase struct {
 
 func testExamples(examples []testCase, t *testing.T) {
 	for i, ex := range examples {
-		machine := em.New(em.MachineSetup{
+		machine, err := em.New(em.MachineSetup{
 			Reflector:     ex.reflector,
 			Rotors:        ex.rotors,
 			RingPositions: ex.ringPositions,
 			Plugboard:     ex.plugboard,
 		})
+		if err != nil {
+			t.Errorf("[%d] error building machine: %s", i, err.Error())
+			continue
+		}
 		machine.SetPositions(ex.positions)
 		actual := machine.Translate(ex.input)
 		if actual != ex.expected {

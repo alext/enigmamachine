@@ -83,8 +83,23 @@ func (r *Rotor) AtNotch() bool {
 }
 
 func (r *Rotor) Translate(input rune) rune {
-	c := r.forward.substitute(input)
+	c := r.substitute(input, r.forward)
 	c = r.next.Translate(c)
-	c = r.reverse.substitute(c)
+	c = r.substitute(c, r.reverse)
 	return c
+}
+
+func (r *Rotor) substitute(input rune, sub substitutor) rune {
+	input = offsetLetter(input, r.positionOffset)
+	res := sub.substitute(input)
+	res = offsetLetter(res, -r.positionOffset)
+	return res
+}
+
+func offsetLetter(letter rune, offset int) rune {
+	offset = (int(letter) - 'A' + offset) % 26
+	if offset < 0 {
+		offset += 26
+	}
+	return rune('A' + offset)
 }

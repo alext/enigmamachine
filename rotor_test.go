@@ -34,10 +34,10 @@ func TestRotorTranslate(t *testing.T) {
 		{
 			ringSetting:  1,
 			position:     'L',
-			input:        'B',
-			innerExpects: 'D',
-			innerReturns: 'L',
-			expected:     'C',
+			input:        'R',
+			innerExpects: 'B',
+			innerReturns: 'F',
+			expected:     'W',
 		},
 		{
 			ringSetting:  5,
@@ -49,20 +49,24 @@ func TestRotorTranslate(t *testing.T) {
 		},
 	}
 
-	for i, ex := range examples {
+	// 1 2 3 4 5 6 7 8 9 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2
+	//                   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6
+	// A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+	// E K M F L G D Q V Z N T O W Y H X U S P A I B R C J
+	for _, ex := range examples {
 		inner := &stubTranslator{translateReturns: ex.innerReturns}
 		rotor, err := em.NewRotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ_R", ex.ringSetting, inner)
 		if err != nil {
-			t.Errorf("[%d] Unexpected error creating rotor: %s", i, err.Error())
+			t.Errorf("[ring: %d, pos: %c] Unexpected error creating rotor: %s", ex.ringSetting, ex.position, err.Error())
 			continue
 		}
 		rotor.SetPosition(ex.position)
 		actual := rotor.Translate(ex.input)
 		if ex.innerExpects != 0 && ex.innerExpects != inner.translateParam {
-			t.Errorf("[%d] input: %c, inner wants: %c, got: %c", i, ex.input, ex.innerExpects, inner.translateParam)
+			t.Errorf("ring: %d, pos: %c, input: %c: inner wants: %c, got: %c", ex.ringSetting, ex.position, ex.input, ex.innerExpects, inner.translateParam)
 		}
 		if actual != ex.expected {
-			t.Errorf("[%d] input: %c, want: %c, got: %c", i, ex.input, ex.expected, actual)
+			t.Errorf("ring: %d, pos: %c, input: %c: want: %c, got: %c", ex.ringSetting, ex.position, ex.input, ex.expected, actual)
 		}
 	}
 }

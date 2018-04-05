@@ -9,7 +9,7 @@ import (
 )
 
 type testCase struct {
-	reflector     em.Reflector
+	reflector     em.ReflectorSpec
 	rotors        []em.RotorSpec
 	ringPositions []int
 	plugboard     []string

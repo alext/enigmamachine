@@ -3,7 +3,7 @@ package enigmamachine
 type Machine struct{}
 
 type MachineSetup struct {
-	Reflector     Reflector
+	Reflector     ReflectorSpec
 	Rotors        []RotorSpec
 	RingPositions []int
 	Plugboard     []string

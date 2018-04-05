@@ -30,7 +30,7 @@ func TestReflectorTranslate(t *testing.T) {
 
 func TestReflectorSetup(t *testing.T) {
 	errorExamples := []struct {
-		config         string
+		config         em.ReflectorSpec
 		errorSubstring string
 	}{
 		{

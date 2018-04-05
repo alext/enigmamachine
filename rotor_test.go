@@ -164,4 +164,22 @@ func TestRotorSetup(t *testing.T) {
 			t.Errorf("[%d] spec: %s, expected no error, got: '%s'", i, spec, err.Error())
 		}
 	}
+
+	ringSettingExamples := map[int]bool{
+		-1: false,
+		0:  false,
+		1:  true,
+		5:  true,
+		26: true,
+		27: false,
+	}
+	for ringSetting, expectValid := range ringSettingExamples {
+		_, err := em.NewRotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ_N", ringSetting, nil)
+		if expectValid && err != nil {
+			t.Errorf("[ring %d] expected valid, got error: %s", ringSetting, err.Error())
+		}
+		if !expectValid && err == nil {
+			t.Errorf("[ring %d] expected invalid, got no error", ringSetting)
+		}
+	}
 }

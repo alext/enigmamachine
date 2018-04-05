@@ -48,6 +48,7 @@ type Rotor struct {
 	forward        substitutor
 	reverse        substitutor
 	notches        string
+	ringOffset     int
 	positionOffset int
 }
 
@@ -56,11 +57,15 @@ func NewRotor(spec RotorSpec, ringSetting int, next Translator) (*Rotor, error) 
 	if err != nil {
 		return nil, err
 	}
+	if ringSetting < 1 || ringSetting > 26 {
+		return nil, fmt.Errorf("Invalid ring setting %d", ringSetting)
+	}
 	r := &Rotor{
 		next:           next,
 		forward:        forward,
 		reverse:        reverse,
 		notches:        notches,
+		ringOffset:     ringSetting - 1,
 		positionOffset: 0,
 	}
 	return r, nil
@@ -90,9 +95,9 @@ func (r *Rotor) Translate(input rune) rune {
 }
 
 func (r *Rotor) substitute(input rune, sub substitutor) rune {
-	input = offsetLetter(input, r.positionOffset)
+	input = offsetLetter(input, r.positionOffset-r.ringOffset)
 	res := sub.substitute(input)
-	res = offsetLetter(res, -r.positionOffset)
+	res = offsetLetter(res, r.ringOffset-r.positionOffset)
 	return res
 }
 

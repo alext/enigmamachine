@@ -20,7 +20,7 @@ func New(s MachineSetup) (m *Machine, err error) {
 	if err != nil {
 		return nil, fmt.Errorf("Reflector error: %s", err.Error())
 	}
-	var next Translator = t
+	var next LetterTranslator = t
 	if len(s.Rotors) < 3 {
 		return nil, fmt.Errorf("Minimum 3 rotors required, have %d", len(s.Rotors))
 	}

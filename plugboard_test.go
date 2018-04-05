@@ -7,12 +7,12 @@ import (
 	em "github.com/alext/enigmamachine"
 )
 
-type stubTranslator struct {
+type stubLetterTranslator struct {
 	translateParam   rune
 	translateReturns rune
 }
 
-func (t *stubTranslator) Translate(input rune) rune {
+func (t *stubLetterTranslator) TranslateLetter(input rune) rune {
 	t.translateParam = input
 	if t.translateReturns != 0 {
 		return t.translateReturns
@@ -20,7 +20,7 @@ func (t *stubTranslator) Translate(input rune) rune {
 	return input
 }
 
-func TestPlugboardTranslate(t *testing.T) {
+func TestPlugboardTranslateLetter(t *testing.T) {
 	examples := []struct {
 		input        rune
 		innerExpects rune
@@ -47,14 +47,14 @@ func TestPlugboardTranslate(t *testing.T) {
 		},
 	}
 
-	inner := &stubTranslator{}
+	inner := &stubLetterTranslator{}
 	plugboard, err := em.NewPlugboard("AF DG EX", inner)
 	if err != nil {
 		t.Fatalf("Unexpected error creating plugboard: %s", err.Error())
 	}
 	for i, ex := range examples {
 		inner.translateReturns = ex.innerReturns
-		actual := plugboard.Translate(ex.input)
+		actual := plugboard.TranslateLetter(ex.input)
 		if ex.innerExpects != 0 && ex.innerExpects != inner.translateParam {
 			t.Errorf("[%d] input: %c, inner wants: %c, got: %c", i, ex.input, ex.innerExpects, inner.translateParam)
 		}

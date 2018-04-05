@@ -6,7 +6,7 @@ import (
 	em "github.com/alext/enigmamachine"
 )
 
-func TestRotorTranslate(t *testing.T) {
+func TestRotorTranslateLetter(t *testing.T) {
 	examples := []struct {
 		ringSetting  int
 		position     rune
@@ -54,14 +54,14 @@ func TestRotorTranslate(t *testing.T) {
 	// A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
 	// E K M F L G D Q V Z N T O W Y H X U S P A I B R C J
 	for _, ex := range examples {
-		inner := &stubTranslator{translateReturns: ex.innerReturns}
+		inner := &stubLetterTranslator{translateReturns: ex.innerReturns}
 		rotor, err := em.NewRotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ_R", ex.ringSetting, inner)
 		if err != nil {
 			t.Errorf("[ring: %d, pos: %c] Unexpected error creating rotor: %s", ex.ringSetting, ex.position, err.Error())
 			continue
 		}
 		rotor.SetPosition(ex.position)
-		actual := rotor.Translate(ex.input)
+		actual := rotor.TranslateLetter(ex.input)
 		if ex.innerExpects != 0 && ex.innerExpects != inner.translateParam {
 			t.Errorf("ring: %d, pos: %c, input: %c: inner wants: %c, got: %c", ex.ringSetting, ex.position, ex.input, ex.innerExpects, inner.translateParam)
 		}

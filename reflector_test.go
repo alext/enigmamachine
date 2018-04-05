@@ -7,7 +7,7 @@ import (
 	em "github.com/alext/enigmamachine"
 )
 
-func TestReflectorTranslate(t *testing.T) {
+func TestReflectorTranslateLetter(t *testing.T) {
 	examples := []struct {
 		input    rune
 		expected rune
@@ -21,7 +21,7 @@ func TestReflectorTranslate(t *testing.T) {
 		t.Fatalf("Unexpected error creating reflector: %s", err.Error())
 	}
 	for i, ex := range examples {
-		actual := reflector.Translate(ex.input)
+		actual := reflector.TranslateLetter(ex.input)
 		if actual != ex.expected {
 			t.Errorf("[%d] input: %c, want: %c, got: %c", i, ex.input, ex.expected, actual)
 		}

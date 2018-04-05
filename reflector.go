@@ -17,6 +17,6 @@ func NewReflector(mapping ReflectorSpec) (r Reflector, err error) {
 	return r, err
 }
 
-func (r Reflector) Translate(input rune) rune {
+func (r Reflector) TranslateLetter(input rune) rune {
 	return r.substitute(input)
 }

@@ -1,5 +1,5 @@
 package enigmamachine
 
-type Translator interface {
-	Translate(rune) rune
+type LetterTranslator interface {
+	TranslateLetter(rune) rune
 }

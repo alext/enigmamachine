@@ -31,7 +31,11 @@ func testExamples(examples []testCase, t *testing.T) {
 			continue
 		}
 		machine.SetPositions(ex.positions)
-		actual := machine.Translate(ex.input)
+		actual, err := machine.TranslateString(ex.input)
+		if err != nil {
+			t.Errorf("[%d] error translating: %s", i, err.Error())
+			continue
+		}
 		if actual != ex.expected {
 			t.Errorf("[%d]\ninput: %s\n want: %s\n  got: %s", i, ex.input, ex.expected, actual)
 		}
@@ -107,14 +111,24 @@ func TestRealExamples(t *testing.T) {
 			// English: Enemy infantry column was observed. Beginning [at] southern exit [of] Baerwalde. Ending 3km east of Neustadt.
 		},
 		{
-			// Operation Barbarossa, 1941
+			// Operation Barbarossa, 1941 (part1)
 			reflector:     reflectors.B,
 			rotors:        []em.RotorSpec{rotors.II, rotors.IV, rotors.V},
 			ringPositions: []int{2, 21, 12},
 			plugboard:     "AV BS CG DL FU HZ IN KM OW RX",
-			positions:     []rune{'B', 'S', 'A'},
+			positions:     []rune{'B', 'L', 'A'},
 			input:         "EDPUD NRGYS ZRCXN UYTPO MRMBO FKTBZ REZKM LXLVE FGUEY SIOZV EQMIK UBPMM YLKLT TDEIS MDICA GYKUA CTCDO MOHWX MUUIA UBSTS LRNBZ SZWNR FXWFY SSXJZ VIJHI DISHP RKLKA YUPAD TXQSP INQMA TLPIF SVKDA SCTAC DPBOP VHJK-",
 			expected:      "AUFKL XABTE ILUNG XVONX KURTI NOWAX KURTI NOWAX NORDW ESTLX SEBEZ XSEBE ZXUAF FLIEG ERSTR ASZER IQTUN GXDUB ROWKI XDUBR OWKIX OPOTS CHKAX OPOTS CHKAX UMXEI NSAQT DREIN ULLXU HRANG ETRET ENXAN GRIFF XINFX RGTX-",
+		},
+		{
+			// Operation Barbarossa, 1941 (part2)
+			reflector:     reflectors.B,
+			rotors:        []em.RotorSpec{rotors.II, rotors.IV, rotors.V},
+			ringPositions: []int{2, 21, 12},
+			plugboard:     "AV BS CG DL FU HZ IN KM OW RX",
+			positions:     []rune{'L', 'S', 'D'},
+			input:         "SFBWD NJUSE GQOBH KRTAR EEZMW KPPRB XOHDR OEQGB BGTQV PGVKB VVGBI MHUSZ YDAJQ IROAX SSSNR EHYGG RPISE ZBOVM QIEMM ZCYSG QDGRE RVBIL EKXYQ IRGIR QNRDN VRXCY YTNJR",
+			expected:      "DREIG EHTLA NGSAM ABERS IQERV ORWAE RTSXE INSSI EBENN ULLSE QSXUH RXROE MXEIN SXINF RGTXD REIXA UFFLI EGERS TRASZ EMITA NFANG XEINS SEQSX KMXKM XOSTW XKAME NECXK",
 			// German: Aufklärung abteilung von Kurtinowa nordwestlich Sebez [auf] Fliegerstraße in Richtung Dubrowki, Opotschka. Um 18:30 Uhr angetreten angriff. Infanterie Regiment 3 geht langsam aber sicher vorwärts. 17:06 Uhr röm eins InfanterieRegiment 3 auf Fliegerstraße mit Anfang 16km ostwärts Kamenec.
 			// English: Reconnaissance division from Kurtinowa north-west of Sebezh on the flight corridor towards Dubrowki, Opochka. Attack begun at 18:30 hours. Infantry Regiment 3 goes slowly but surely forwards. 17:06 hours [Roman numeral I?] Infantry Regiment 3 on the flight corridor starting 16 km east of Kamenec.
 		},

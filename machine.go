@@ -5,6 +5,9 @@ import (
 	"strings"
 )
 
+// MachineSetup describes the setup of an Enigma Machine. This describes the
+// Reflector, Rotors and Plugboard setup. This passed to New to describe the
+// setup of a new Machine instance.
 type MachineSetup struct {
 	Reflector     ReflectorSpec
 	Rotors        []RotorSpec
@@ -12,11 +15,14 @@ type MachineSetup struct {
 	Plugboard     PlugboardSpec
 }
 
+// Machine represents an Enigma Machine.
 type Machine struct {
 	rotors    []*Rotor
 	plugboard Plugboard
 }
 
+// New constructs an enigma machine with given MachineSetup. err will be
+// non-nil if the given configuration is invalid.
 func New(s MachineSetup) (m *Machine, err error) {
 	m = &Machine{}
 	t, err := NewReflector(s.Reflector)
@@ -45,6 +51,7 @@ func New(s MachineSetup) (m *Machine, err error) {
 	return m, nil
 }
 
+// SetPositions sets the positions of the rotors to the given letters.
 func (m *Machine) SetPositions(positions []rune) {
 	for i, pos := range positions {
 		if i >= len(m.rotors) {
@@ -65,6 +72,9 @@ func (m *Machine) advanceRotors() {
 	m.rotors[l-1].AdvancePosition()
 }
 
+// TranslateLetter performs a translation (encryption or decryption) of a
+// single letter. This effectively simulates the pressing of a single key on
+// the Enigma Machine.
 func (m *Machine) TranslateLetter(input rune) rune {
 	if input < 'A' || input > 'Z' {
 		return input
@@ -73,6 +83,9 @@ func (m *Machine) TranslateLetter(input rune) rune {
 	return m.plugboard.TranslateLetter(input)
 }
 
+// TranslateString runs the given string through the EnigmaMachine and returns
+// the result. Any characters in the input that are not the uppercase letters
+// 'A' - 'Z' are returned in the output unchanged.
 func (m *Machine) TranslateString(input string) (string, error) {
 	var out strings.Builder
 	for _, ch := range input {

@@ -16,10 +16,15 @@ func ExampleNew() {
 		Plugboard:     "AP BR CM FZ GJ IL NT OV QS WX",
 	})
 	machine.SetPositions([]rune{'V', 'Q', 'Q'})
-
 	result, _ := machine.TranslateString("TESTING TESTING")
 	fmt.Println(result)
-	// Output: HKDHDZF PDBBZXK
+
+	machine.SetPositions([]rune{'V', 'Q', 'Q'})
+	result, _ = machine.TranslateString(result)
+	fmt.Println(result)
+	// Output:
+	// HKDHDZF PDBBZXK
+	// TESTING TESTING
 }
 
 func ExampleNew_custom() {
@@ -34,8 +39,13 @@ func ExampleNew_custom() {
 		Plugboard:     "AP BR CM FZ GJ IL NT OV QS WX",
 	})
 	machine.SetPositions([]rune{'V', 'Q', 'Q'})
-
 	result, _ := machine.TranslateString("TESTING TESTING")
 	fmt.Println(result)
-	// Output: KPNGAST GRNJDVY
+
+	machine.SetPositions([]rune{'V', 'Q', 'Q'})
+	result, _ = machine.TranslateString(result)
+	fmt.Println(result)
+	// Output:
+	// KPNGAST GRNJDVY
+	// TESTING TESTING
 }
